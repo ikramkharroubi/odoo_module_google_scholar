@@ -1,0 +1,71 @@
+# Odoo
+*.pyc
+__pycache__/
+*.pyo
+*.log
+*.pot
+*.mo
+*.pot~
+*.po~
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Database
+*.db
+*.sql
+*.sql.gz
+*.dump
+*.backup
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# Odoo specific
+*.pyc
+*.pyo
+*.log
+filestore/
+sessions/
+*.conf.local
+
+# Backups
+backups/
+*.backup
+*.sql.gz
+*.dump
+
+# Temporary files
+*.tmp
+*.bak
+*.old
+nettoyer_*.sh
+nettoyer_*.sql
+remove_*.py
+remove_*.sh
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Sensitive data
+*.key
+*.pem
+*.secret
+secrets/
+.env
+.env.local
+
+# Compiled assets
+static/src/css/*.css.map
+static/src/js/*.js.map

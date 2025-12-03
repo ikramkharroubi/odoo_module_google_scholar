@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.university_scholar</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='companies']" position="after">
+                <block title="University Scholar" id="university_scholar_settings">
+                    <setting string="SerpAPI Configuration" 
+                             help="Configurez votre clé API SerpAPI pour accéder à Google Scholar. Obtenez votre clé sur https://serpapi.com/">
+                        <field name="serpapi_key" password="True" placeholder="Votre clé API SerpAPI"/>
+                        <div class="content-group mt16">
+                            <p class="text-muted">
+                                <i class="fa fa-info-circle"/> 
+                                La clé API est nécessaire pour synchroniser les articles depuis Google Scholar.
+                                <a href="https://serpapi.com/" target="_blank">Obtenir une clé API</a>
+                            </p>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

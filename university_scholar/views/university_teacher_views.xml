@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List View for Teachers -->
+    <record id="view_university_teacher_tree" model="ir.ui.view">
+        <field name="name">university.teacher.list</field>
+        <field name="model">university.teacher</field>
+        <field name="arch" type="xml">
+            <list string="Enseignants">
+                <field name="name"/>
+                <field name="affiliation"/>
+                <field name="scholar_id"/>
+                <field name="article_count" string="Articles"/>
+                <field name="total_citations" string="Citations"/>
+                <field name="h_index"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View for Teachers -->
+    <record id="view_university_teacher_form" model="ir.ui.view">
+        <field name="name">university.teacher.form</field>
+        <field name="model">university.teacher</field>
+        <field name="arch" type="xml">
+            <form string="Enseignant">
+                <header>
+                    <button name="action_fetch_articles" 
+                            type="object" 
+                            string="Synchroniser avec Google Scholar"
+                            class="btn-primary"
+                            icon="fa-download"/>
+                    <button name="action_view_articles" 
+                            type="object" 
+                            string="Voir les articles"
+                            icon="fa-list"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_articles" icon="fa-book">
+                            <field name="article_count" widget="statinfo" string="Articles"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Nom complet"/>
+                            <field name="affiliation" placeholder="Université/Institution"/>
+                            <field name="email" placeholder="email@example.com"/>
+                        </group>
+                        <group>
+                            <field name="scholar_id" placeholder="Google Scholar ID"/>
+                            <field name="semantic_scholar_id" placeholder="Semantic Scholar ID"/>
+                            <field name="h_index" readonly="1"/>
+                            <field name="i10_index" readonly="1"/>
+                            <field name="total_citations" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Articles" name="articles">
+                            <field name="article_ids" nolabel="1">
+                                <list string="Articles" 
+                                      default_order="year desc, citations desc"
+                                      decoration-muted="year and year &lt; 2020"
+                                      decoration-success="citations &gt; 10"
+                                      decoration-info="citations &gt; 0 and citations &lt;= 10">
+                                    <field name="id" string="ID" readonly="1"/>
+                                    <field name="name" string="Titre"/>
+                                    <field name="year" string="Année"/>
+                                    <field name="journal" string="Journal/Conférence"/>
+                                    <field name="citations" string="Citations" sum="Total"/>
+                                    <field name="authors" string="Auteurs" optional="hide"/>
+                                    <field name="url" widget="url" string="URL" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View for Teachers -->
+    <record id="view_university_teacher_search" model="ir.ui.view">
+        <field name="name">university.teacher.search</field>
+        <field name="model">university.teacher</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher un enseignant">
+                <field name="name" string="Nom"/>
+                <field name="affiliation" string="Affiliation"/>
+                <field name="scholar_id" string="Scholar ID"/>
+                <filter string="Avec articles" name="has_articles" domain="[('article_ids', '!=', False)]"/>
+                <separator/>
+                <group expand="0" string="Grouper par">
+                    <filter string="Affiliation" name="group_affiliation" context="{'group_by': 'affiliation'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Kanban View for Teachers (optional) -->
+    <record id="view_university_teacher_kanban" model="ir.ui.view">
+        <field name="name">university.teacher.kanban</field>
+        <field name="model">university.teacher</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="affiliation" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="affiliation"/>
+                <field name="article_count"/>
+                <field name="total_citations"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <field name="name"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_content">
+                                <field name="affiliation"/>
+                                <div class="row mt-2">
+                                    <div class="col-6">
+                                        <span class="text-muted">Articles:</span>
+                                        <strong><field name="article_count"/></strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <span class="text-muted">Citations:</span>
+                                        <strong><field name="total_citations"/></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action for Teachers -->
+    <record id="action_university_teacher" model="ir.actions.act_window">
+        <field name="name">Enseignants</field>
+        <field name="res_model">university.teacher</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="search_view_id" ref="view_university_teacher_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre premier enseignant !
+            </p>
+            <p>
+                Ajoutez les informations de l'enseignant et son Google Scholar ID,
+                puis synchronisez pour importer automatiquement ses articles.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_university_root" 
+              name="Université" 
+              sequence="100"/>
+    
+    <menuitem id="menu_university_teacher" 
+              name="Enseignants" 
+              parent="menu_university_root" 
+              action="action_university_teacher" 
+              sequence="10"/>
+</odoo>
+

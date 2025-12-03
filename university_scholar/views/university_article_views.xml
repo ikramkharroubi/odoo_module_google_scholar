@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List View for Articles -->
+    <record id="view_university_article_tree" model="ir.ui.view">
+        <field name="name">university.article.list</field>
+        <field name="model">university.article</field>
+        <field name="arch" type="xml">
+            <list string="Articles" 
+                  default_order="year desc, citations desc"
+                  decoration-muted="year and year &lt; 2020"
+                  decoration-success="citations &gt; 10"
+                  decoration-info="citations &gt; 0 and citations &lt;= 10"
+                  sample="1">
+                <field name="id" string="ID" readonly="1"/>
+                <field name="name" string="Titre" optional="show"/>
+                <field name="teacher_id" string="Enseignant" optional="show"/>
+                <field name="year" string="Année" optional="show"/>
+                <field name="journal" string="Journal/Conférence" optional="hide"/>
+                <field name="citations" string="Citations" optional="show" sum="Total"/>
+                <field name="authors" string="Auteurs" optional="hide"/>
+                <field name="doi" string="DOI" optional="hide"/>
+                <field name="url" widget="url" string="URL" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View for Articles -->
+    <record id="view_university_article_form" model="ir.ui.view">
+        <field name="name">university.article.form</field>
+        <field name="model">university.article</field>
+        <field name="arch" type="xml">
+            <form string="Article">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Titre de l'article"/>
+                            <field name="teacher_id" options="{'no_create': True}"/>
+                            <field name="authors" placeholder="Auteurs"/>
+                        </group>
+                        <group>
+                            <field name="year"/>
+                            <field name="journal" placeholder="Journal/Conférence"/>
+                            <field name="citations"/>
+                            <field name="doi" placeholder="DOI"/>
+                            <field name="url" widget="url" placeholder="URL"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="abstract" placeholder="Résumé de l'article"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View for Articles -->
+    <record id="view_university_article_search" model="ir.ui.view">
+        <field name="name">university.article.search</field>
+        <field name="model">university.article</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher un article">
+                <field name="name" string="Titre"/>
+                <field name="teacher_id" string="Enseignant"/>
+                <field name="journal" string="Journal"/>
+                <field name="year" string="Année"/>
+                <filter string="Articles récents" name="recent" domain="[('year', '>=', 2020)]"/>
+                <filter string="Articles cités" name="cited" domain="[('citations', '>', 0)]"/>
+                <filter string="Hautes citations" name="high_citations" domain="[('citations', '>', 10)]"/>
+                <separator/>
+                <group expand="0" string="Grouper par">
+                    <filter string="Enseignant" name="group_teacher" context="{'group_by': 'teacher_id'}"/>
+                    <filter string="Année" name="group_year" context="{'group_by': 'year'}"/>
+                    <filter string="Journal" name="group_journal" context="{'group_by': 'journal'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Graph View for Articles -->
+    <record id="view_university_article_graph" model="ir.ui.view">
+        <field name="name">university.article.graph</field>
+        <field name="model">university.article</field>
+        <field name="arch" type="xml">
+            <graph string="Articles par année" type="bar">
+                <field name="year" type="row"/>
+                <field name="citations" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View for Articles -->
+    <record id="view_university_article_pivot" model="ir.ui.view">
+        <field name="name">university.article.pivot</field>
+        <field name="model">university.article</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse des articles">
+                <field name="teacher_id" type="row"/>
+                <field name="year" type="col"/>
+                <field name="citations" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action for Articles -->
+    <record id="action_university_article" model="ir.actions.act_window">
+        <field name="name">Articles</field>
+        <field name="res_model">university.article</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+        <field name="search_view_id" ref="view_university_article_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun article trouvé
+            </p>
+            <p>
+                Les articles sont importés automatiquement depuis Google Scholar
+                lorsque vous synchronisez un enseignant.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item for Articles -->
+    <menuitem id="menu_university_article" 
+              name="Articles" 
+              parent="menu_university_root" 
+              action="action_university_article" 
+              sequence="20"/>
+</odoo>
+
