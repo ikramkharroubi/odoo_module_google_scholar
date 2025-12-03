@@ -43,3 +43,25 @@ Ikram Kharroubi - ikramkharou@gmail.com
 ## Licence
 
 LGPL-3
+
+## Modules MuK Backend Theme
+
+Ce repository inclut également les modules MuK Backend Theme pour Odoo 18:
+- `muk_web_chatter` - Amélioration du chatter
+- `muk_web_dialog` - Dialogues améliorés
+- `muk_web_appsbar` - Barre d'applications
+- `muk_web_colors` - Gestion des couleurs
+- `muk_web_theme` - Thème backend principal
+
+### Installation des modules MuK
+
+1. Installez les modules dans cet ordre:
+   - `muk_web_chatter`
+   - `muk_web_dialog`
+   - `muk_web_appsbar`
+   - `muk_web_colors`
+   - `muk_web_theme` (en dernier)
+
+2. Redémarrez Odoo après chaque installation
+
+3. Activez le thème dans Paramètres → Général → Interface
