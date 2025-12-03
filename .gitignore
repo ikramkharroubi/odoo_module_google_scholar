@@ -40,7 +40,6 @@ sessions/
 *.conf.local
 
 # Backups
-backups/
 *.backup
 *.sql.gz
 *.dump
@@ -69,3 +68,8 @@ secrets/
 # Compiled assets
 static/src/css/*.css.map
 static/src/js/*.js.map
+# Permettre les sauvegardes dans le dossier backups/
+!backups/
+!backups/*.sql.gz
+!backups/*.sql
+!backups/README.md
